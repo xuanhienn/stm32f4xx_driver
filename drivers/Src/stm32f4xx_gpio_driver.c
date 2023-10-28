@@ -75,10 +75,14 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 		{
 			//3. configure both the FTSR and RTSR
 			EXTI->FTSR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
-			EXTI->RTSR |= (1 << pGPIOHanlde->pGPIO_PinConfig->GPIO_PinNumber);
+			EXTI->RTSR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
 		}
 		//2. configure the GPIO port selection in SYSCFG_EXTIR
-
+		uint8_t temp1 = pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber / 4;
+		uint8_t temp2 = pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber % 4;
+		uint8_t portcode = GPIO_BASEADDR_TO_CODE(pGPIOHandle->pGPIOx);
+		SYSCFG_PCLK_EN();
+		SYSCFG->EXTICR[temp1] = portcode << (temp2 * 4);
 		//3. enable the EXTI interrupt delivery using IMR
 		EXTI->IMR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
 	}
@@ -182,6 +186,49 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber)
 {
 	pGPIOx->ODR ^= (1 << PinNumber);
 }
-void GPIO_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t EnorDi);
+void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi)
+{
+	if(EnorDi == ENABLE)
+	{
+		if(IRQNumber <= 31)
+		{
+			// program ISER0 register
+			*NVIC_ISER0 |= (1 << IRQNumber);
+		}
+		else if(IRQNumber > 31 && IRQNumber <64)
+		{
+			*NVIC_ISER1 |= (1 << (IRQNumber % 32));
+		}
+		else if(IRQNumber >= 64 && IRQNumber <96)
+		{
+			*NVIC_ISER2 |= (1 << (IRQNumber % 64));
+		}
+	}
+	else
+	{
+		if(IRQNumber <= 31)
+		{
+			*NVIC_ICER0 |= (1 << IRQNumber);
+		}
+		else if (IRQNumber > 31 && IRQNumber <64)
+		{
+			*NVIC_ICER1 |= (1 << IRQNumber % 32);
+		}
+		else if (IRQNumber >= 64 && IRQNumber <96)
+		{
+			*NVIC_ICER2 |= (1 << IRQNumber % 64);
+		}
+	}
+}
+void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority)
+{
+	//1. find the IPR register
+	uint8_t iprx = IRQNumber / 4;
+	uint8_t iprx_section = IRQNumber % 4;
+	uint8_t shift_amount = (8 * iprx_section) + (8 - NO_IPR_BITS_IMPLEMENTED);
+	*(NVIC_IPR_BASEADDR + (iprx * 4)) |= (IRQPriority << shift_amount);
+
+}
+
 void GPIO_IRQHandling(uint8_t PinNumber);
 

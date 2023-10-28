@@ -8,7 +8,24 @@
 #ifndef INC_STM32F4XX_H_
 #define INC_STM32F4XX_H_
 #include <stdint.h>
+//
+/*
+ Arm cortex Mx Processor NVIC ISERx register Address
+ */
+#define NVIC_ISER0				((__vo uint32_t*)0xE000E100)
+#define NVIC_ISER1				((__vo uint32_t*)0xE000E104)
+#define NVIC_ISER2				((__vo uint32_t*)0xE000E108)
+#define NVIC_ISER3				((__vo uint32_t*)0xE000E10C)
 
+//ARM CORTEX Mx PROCESSOR NVIC ICERx register address
+#define NVIC_ICER0				((__vo uint32_t*)0xE000E180)
+#define NVIC_ICER1				((__vo uint32_t*)0xE000E184)
+#define NVIC_ICER2				((__vo uint32_t*)0xE000E188)
+#define NVIC_ICER3				((__vo uint32_t*)0xE000E18C)
+// arm cortex m4x nvic IPRx register address
+#define NVIC_IPR_BASEADDR		((__vo uint32_t*)0xE000E400)
+//
+#define NO_IPR_BITS_IMPLEMENTED	4
 //base addresses of flash and SRAM memories
 #define FLASH_BASEADDR			0x08000000UL
 #define SRAM1_BASEADDR			0x20000000UL // 112KB = 114688 Byte => Hex: 1C000
@@ -192,4 +209,25 @@ typedef struct
 #define GPIOG_REG_RESET()	do{ (RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR &= ~(1 << 6));} while(0)
 #define GPIOH_REG_RESET()	do{ (RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7));} while(0)
 #define GPIOI_REG_RESET()	do{ (RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8));} while(0)
+//
+#define GPIO_BASEADDR_TO_CODE(x)	(x == GPIOA) ? 0 : \
+									(x == GPIOB) ? 1 : \
+									(x == GPIOC) ? 2 : \
+									(x == GPIOD) ? 3 : \
+									(x == GPIOE) ? 4 : \
+									(x == GPIOF) ? 5 : \
+									(x == GPIOG) ? 6 : \
+									(x == GPIOH) ? 7 : \
+									(x == GPIOI) ? 8 : 0
+
+// Interrupt Request numbers of stm32f407x MCU
+#define IRQ_NO_EXTI0		6
+#define IRQ_NO_EXTI1		7
+#define IRQ_NO_EXTI2		8
+#define IRQ_NO_EXTI3		9
+#define IRQ_NO_EXTI4		10
+#define IRQ_NO_EXTI9_5		23
+#define IRQ_NO_EXTI15_10	40
+
+
 #endif /* INC_STM32F4XX_H_ */
