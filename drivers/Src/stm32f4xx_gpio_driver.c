@@ -62,13 +62,25 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 		if(pGPIOHandle->pGPIO_PinConfig->GPIO_PinMode == GPIO_MODE_IT_FT)
 		{
 			//1. Configure the FTSR
+			EXTI->FTSR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
+			// clear the corresponding RTSR bit
+			EXTI->RTSR &= ~(1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
 		}else if(pGPIOHandle->pGPIO_PinConfig->GPIO_PinMode == GPIO_MODE_IT_RT)
 		{
 			//2. configure the RTSR
+			EXTI->RTSR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
+			// clear the corresponding FTSR bit
+			EXTI->RTSR &= ~(1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
 		}else if(pGPIOHandle->pGPIO_PinConfig->GPIO_PinMode == GPIO_MODE_IT_RFT)
 		{
 			//3. configure both the FTSR and RTSR
+			EXTI->FTSR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
+			EXTI->RTSR |= (1 << pGPIOHanlde->pGPIO_PinConfig->GPIO_PinNumber);
 		}
+		//2. configure the GPIO port selection in SYSCFG_EXTIR
+
+		//3. enable the EXTI interrupt delivery using IMR
+		EXTI->IMR |= (1 << pGPIOHandle->pGPIO_PinConfig->GPIO_PinNumber);
 	}
 	//2. configure the speed
 	temp = 0;

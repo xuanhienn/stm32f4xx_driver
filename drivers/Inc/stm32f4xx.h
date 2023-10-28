@@ -8,6 +8,7 @@
 #ifndef INC_STM32F4XX_H_
 #define INC_STM32F4XX_H_
 #include <stdint.h>
+
 //base addresses of flash and SRAM memories
 #define FLASH_BASEADDR			0x08000000UL
 #define SRAM1_BASEADDR			0x20000000UL // 112KB = 114688 Byte => Hex: 1C000
@@ -49,6 +50,8 @@
 #define SYSCFG_BASEADDR			(APB2PERIPH_BASEADDR + 0x3800)
 #define USART1_BASEADDR			(APB2PERIPH_BASEADDR + 0x1000)
 #define USART6_BASEADDR			(APB2PERIPH_BASEADDR + 0x1400)
+//
+#define EXTI_BASEADDR			(APB2PERIPH_BASEADDR + 0x3C00)
 //
 #define __vo volatile
 typedef struct
@@ -98,6 +101,28 @@ typedef struct
     __vo uint32_t SSCGR;
     __vo uint32_t PLLI2SCFGR;
 }RCC_RegDef_t;
+//
+typedef struct
+{
+	__vo uint32_t IMR;
+	__vo uint32_t EMR;
+	__vo uint32_t RTSR;
+	__vo uint32_t FTSR;
+	__vo uint32_t SWIER;
+	__vo uint32_t PR;
+
+}EXTI_RegDef_t;
+//
+typedef struct
+{
+	__vo uint32_t MEMRMP;
+	__vo uint32_t PMC;
+		 uint32_t RESERVED1[2];
+	__vo uint32_t EXTICR[4];
+		 uint32_t RESERVED2[2];
+	__vo uint32_t CMPCR;
+	__vo uint32_t CFGR;
+}SYSCFG_RegDef_t;
 //peripheral base addresses typecasted to xxx_RegDef_t
 #define GPIOA			((GPIO_RegDef_t*)GPIOA_BASEADDR)
 #define GPIOB			((GPIO_RegDef_t*)GPIOB_BASEADDR)
@@ -110,6 +135,10 @@ typedef struct
 #define GPIOI			((GPIO_RegDef_t*)GPIOI_BASEADDR)
 
 #define RCC				((RCC_RegDef_t*)RCC_BASEADDR)
+
+#define EXTI			((EXTI_RegDef_t*)EXTI_BASEADDR)
+
+#define SYSCFG 			((SYSCFG_RegDef_t*)SYSCFG_BASEADDR)
 // GPIO PERIPHERAL CLOCK ENABLE
 #define GPIOA_PCLK_EN()		(RCC->AHB1ENR |= (1 << 0))
 #define GPIOB_PCLK_EN()		(RCC->AHB1ENR |= (1 << 1))
@@ -139,8 +168,10 @@ typedef struct
 #define UART4_PCCK_EN()		(RCC->APB1ENR |= (1 << 19))
 #define UART5_PCCK_EN()		(RCC->APB1ENR |= (1 << 20))
 #define USART6_PCCK_EN()	(RCC->APB1ENR |= (1 << 5))
+
 // CLOCK ENABLE MACROS FOR SYSCFG PERIPHERAL
 #define SYSCFG_PCLK_EN()	(RCC->APB2ENR |= (1 << 14))
+
 //CLOCK DISBALE MACROS FOR GPIO PERIPHERAL
 #define GPIO_PCLK_DI()
 //SOME GENERIC MACROS
