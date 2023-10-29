@@ -140,6 +140,20 @@ typedef struct
 	__vo uint32_t CMPCR;
 	__vo uint32_t CFGR;
 }SYSCFG_RegDef_t;
+
+//
+typedef struct
+{
+	__vo uint32_t CR1;
+	__vo uint32_t CR2;
+	__vo uint32_t SR;
+	__vo uint32_t DR;
+	__vo uint32_t CRCPR;
+	__vo uint32_t RXCRCR;
+	__vo uint32_t TXCRCR;
+	__vo uint32_t I2SCFGR;
+	__vo uint32_t I2SPR;
+}SPI_RegDef_t;
 //peripheral base addresses typecasted to xxx_RegDef_t
 #define GPIOA			((GPIO_RegDef_t*)GPIOA_BASEADDR)
 #define GPIOB			((GPIO_RegDef_t*)GPIOB_BASEADDR)
@@ -156,6 +170,10 @@ typedef struct
 #define EXTI			((EXTI_RegDef_t*)EXTI_BASEADDR)
 
 #define SYSCFG 			((SYSCFG_RegDef_t*)SYSCFG_BASEADDR)
+//
+#define SPI1			((SPI_RegDef_t*)SPI1_BASEADDR)
+#define SPI2			((SPI_RegDef_t*)SPI2_BASEADDR)
+#define SPI3			((SPI_RegDef_t*)SPI3_BASEADDR)
 // GPIO PERIPHERAL CLOCK ENABLE
 #define GPIOA_PCLK_EN()		(RCC->AHB1ENR |= (1 << 0))
 #define GPIOB_PCLK_EN()		(RCC->AHB1ENR |= (1 << 1))
