@@ -7,7 +7,11 @@
 
 #ifndef INC_STM32F4XX_H_
 #define INC_STM32F4XX_H_
+
 #include <stdint.h>
+
+//#include "stm32f4xx_gpio_driver.h"
+//#include "stm32f4xx_spi_driver.h"
 //
 /*
  Arm cortex Mx Processor NVIC ISERx register Address
@@ -64,6 +68,7 @@
 // base addresses of peripherals which are hanging on APB2 bus
 #define EXTI_BASEADDR			(APB2PERIPH_BASEADDR + 0x3C00)
 #define SPI1_BASEADDR			(APB2PERIPH_BASEADDR + 0x3000)
+#define SPI4_BASEADDR			(APB2PERIPH_BASEADDR + 0x3400)
 #define SYSCFG_BASEADDR			(APB2PERIPH_BASEADDR + 0x3800)
 #define USART1_BASEADDR			(APB2PERIPH_BASEADDR + 0x1000)
 #define USART6_BASEADDR			(APB2PERIPH_BASEADDR + 0x1400)
@@ -83,7 +88,7 @@ typedef struct
 	__vo uint32_t BSRRH;
 	__vo uint32_t LCKR;
 	__vo uint32_t AFR[2];
-}GPIO_RegDef_t;
+} GPIO_RegDef_t;
 //
 typedef struct
 {
@@ -174,6 +179,7 @@ typedef struct
 #define SPI1			((SPI_RegDef_t*)SPI1_BASEADDR)
 #define SPI2			((SPI_RegDef_t*)SPI2_BASEADDR)
 #define SPI3			((SPI_RegDef_t*)SPI3_BASEADDR)
+#define SPI4			((SPI_RegDef_t*)SPI4_BASEADDR)
 // GPIO PERIPHERAL CLOCK ENABLE
 #define GPIOA_PCLK_EN()		(RCC->AHB1ENR |= (1 << 0))
 #define GPIOB_PCLK_EN()		(RCC->AHB1ENR |= (1 << 1))
@@ -193,7 +199,7 @@ typedef struct
 //SPI
 #define SPI1_PCLK_EN()		(RCC->APB2ENR |= (1 << 12))
 #define SPI2_PCLK_EN()		(RCC->APB1ENR |= (1 << 14))
-#define SPI3_PLCK_EN()		(RCC->APB1ENR |= (1 << 15))
+#define SPI3_PCLK_EN()		(RCC->APB1ENR |= (1 << 15))
 #define SPI4_PCLK_EN()		(RCC->APB2ENR |= (1 << 13))
 
 // UART CLOCK ENABLE
