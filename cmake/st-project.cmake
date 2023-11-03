@@ -73,6 +73,7 @@ target_sources(
     "Src\\sysmem.c"
     "Startup\\startup_stm32f407vgtx.s"
     "drivers\\Src\\stm32f4xx_gpio_driver.c"
+    "drivers\\Src\\stm32f4xx_spi_driver.c"
 )
 
 add_custom_command(

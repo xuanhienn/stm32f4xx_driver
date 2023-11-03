@@ -16,15 +16,51 @@
  ******************************************************************************
  */
 #include <stm32f4xx.h>
+#include <stm32f4xx_gpio_driver.h>
+#include <stm32f4xx_spi_driver.h>
 #include <stdint.h>
 //define base address of flash mem and sram
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
+// PB15 -> MOSI
+// PB14 -> MISO
+// PB13 -> SCLK
+// PB12 -> NSS
+void SPI2_GPIOInits(void)
+{
+	GPIO_Handle_t pGPIOHandle;
+	pGPIOHandle.pGPIOx = GPIOB;
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_ALTFN;
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinAltFunMode = 5;
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_HIGH;
 
+	//sclk
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_13;
+	GPIO_Init(&pGPIOHandle);
+
+	//MOSI
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
+	GPIO_Init(&pGPIOHandle);
+
+	//MISO
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
+	GPIO_Init(&pGPIOHandle);
+
+	//NSS
+	pGPIOHandle.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
+	GPIO_Init(&pGPIOHandle);
+}
+void SPI2_Init(void)
+{
+	SPI_Handle_t SPIHandle;
+	SPIHandle.pSPIx = SPI2;
+}
 int main(void)
 {
-    /* Loop forever */
-	for(;;);
+    SPI2_GPIOInits();
+    return 0;
 }
