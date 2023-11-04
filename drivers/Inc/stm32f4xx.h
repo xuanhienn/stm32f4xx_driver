@@ -78,7 +78,7 @@
 #define __vo volatile
 typedef struct
 {
-	__vo uint32_t MODER;				//GPIO port Mode register(00:Input(reset state), 01:general purpose, 10:AF mode; 11:Analog mode)
+	__vo uint32_t MODER;
 	__vo uint32_t OTYPER;
 	__vo uint32_t OSPEEDR;
 	__vo uint32_t PUPDR;

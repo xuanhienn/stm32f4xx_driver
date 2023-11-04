@@ -74,4 +74,6 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t *gGPIOx, uint8_t PinNumber);
 void GPIO_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
 void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
 void GPIO_IRQHandling(uint8_t PinNumber);
+
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi);
 #endif

@@ -19,6 +19,7 @@
 #include <stm32f4xx_gpio_driver.h>
 #include <stm32f4xx_spi_driver.h>
 #include <stdint.h>
+#include <string.h>
 //define base address of flash mem and sram
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
@@ -56,11 +57,28 @@ void SPI2_GPIOInits(void)
 }
 void SPI2_Init(void)
 {
-	SPI_Handle_t SPIHandle;
-	SPIHandle.pSPIx = SPI2;
+	SPI_Handle_t SPI2Handle;
+
+	SPI2Handle.pSPIx = SPI2;
+	SPI2Handle.SPIConfig.SPI_BusConfig = SPI_BUS_CONFIG_FD;
+	SPI2Handle.SPIConfig.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
+	SPI2Handle.SPIConfig.SPI_SclkSpeed = SPI_SCLK_SPEED_DIV2;
+	SPI2Handle.SPIConfig.SPI_DFF = SPI_DFF_8BITS;
+	SPI2Handle.SPIConfig.SPI_CPOL = SPI_CPOL_LOW;
+	SPI2Handle.SPIConfig.SPI_CPHA = SPI_CPHA_LOW;
+	SPI2Handle.SPIConfig.SPI_SSM = SPI_SSM_EN;
+
+	SPI_Init(&SPI2Handle);
 }
 int main(void)
 {
+	char user_data[] = "hello world";
     SPI2_GPIOInits();
+    SPI2_Init();
+
+    //enable
+    SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
+
+    while(1);
     return 0;
 }

@@ -8,6 +8,8 @@
 #include "stm32f4xx_spi_driver.h"
 void SPI_Init(SPI_Handle_t *pSPIHandle)
 {
+	// ENABLE SPI PERIPHERAL CLOCK
+	SPI_PeriClockControl(pSPIHandle->pSPIx, ENABLE);
 	uint32_t temp_reg = 0;
 	//1. config the device mode
 	temp_reg |= pSPIHandle->SPIConfig.SPI_DeviceMode << 2;
