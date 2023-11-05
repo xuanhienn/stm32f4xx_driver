@@ -8,7 +8,10 @@
 #ifndef INC_STM32F4XX_SPI_DRIVER_H_
 #define INC_STM32F4XX_SPI_DRIVER_H_
 #include "stm32f4xx.h"
-
+//possible SPI application state
+#define SPI_READY						0
+#define SPI_BUSY_IN_RX					1
+#define SPI_BUSY_IN_TX					2
 //SPI DeviceMode, BIT 2 IN SPI_CR1 REG
 #define SPI_DEVICE_MODE_MASTER			1
 #define SPI_DEVICE_MODE_SLAVE			0
@@ -62,8 +65,14 @@ typedef struct
 
 typedef struct
 {
-	SPI_RegDef_t *pSPIx;
-	SPI_Config_t SPIConfig;
+	SPI_RegDef_t	*pSPIx;
+	SPI_Config_t	SPIConfig;
+	uint8_t 		*pTxBuffer;
+	uint8_t			*pRxBuffer;
+	uint32_t		TxLen;
+	uint32_t		RxLen;
+	uint8_t			TxState;
+	uint8_t			RxState;
 }SPI_Handle_t;
 /*
  * Peripheral clock setup
@@ -72,14 +81,17 @@ void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi);
 /*
  * Init and DeInit
  * */
- void SPI_Init(SPI_Handle_t *pSPIHandle);
- void SPI_DeInit(SPI_RegDef_t *pSPIx);
+void SPI_Init(SPI_Handle_t *pSPIHandle);
+void SPI_DeInit(SPI_RegDef_t *pSPIx);
  // Data send and receive
- void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
- void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len);
+void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len);
 
+uint8_t SPI_SendDataIT(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+void SPI_ReceiveDataIT(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len);
  //IRQ configuration and ISR handling
- void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
- void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
- void SPI_IRQHandling(SPI_Handle_t *pHandle);
+void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
+void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
+void SPI_IRQHandling(SPI_Handle_t *pHandle);
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi);
 #endif /* INC_STM32F4XX_SPI_DRIVER_H_ */

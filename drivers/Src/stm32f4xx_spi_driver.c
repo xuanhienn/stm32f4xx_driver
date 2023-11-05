@@ -70,6 +70,18 @@ void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi)
 
 	}
 }
+//
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi)
+{
+	if(EnorDi == ENABLE)
+	{
+		pSPIx->CR1 |= (1 << SPI_CR1_SPE);
+	}
+	else
+	{
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SPE);
+	}
+}
 uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName)
 {
 	if(pSPIx->SR & FlagName)
@@ -83,30 +95,90 @@ uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName)
 }
 void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len)
 {
+	//1. check the len of data
 	while(Len > 0)
 	{
-		//1. wait until TX buff is empty
+		//2. wait the TxFlag
 		while(SPI_GetFlagStatus(pSPIx, SPI_TXE_FLAG) == FLAG_RESET);
-
-		//2. CHECK THE DFF BIT IN CRC1
+		//3. check the DFF bit
 		if(pSPIx->CR1 & (1 << SPI_CR1_DFF))
 		{
-			// 16 BIT DFF
-			//load data
 			pSPIx->DR = *((uint16_t*)pTxBuffer);
 			Len--;
 			Len--;
 			(uint16_t*)pTxBuffer++;
-		}else
+		}
+		else
 		{
-			 // 8 bit dff
 			pSPIx->DR = *pTxBuffer;
 			Len--;
 			pTxBuffer++;
 		}
+
 	}
 }
+
 void SPI_ReceiveData(SPI_RegDef_t *pSPIx, uint8_t *pRxBuffer, uint32_t Len)
 {
+	while(Len > 0)
+	{
+		while(SPI_GetFlagStatus(pSPIx, SPI_RXNE_FLAG) == FLAG_RESET);
+		// check dff bit
+		if(pSPIx->CR1 & (1 << SPI_CR1_DFF))
+		{
+			*((uint16_t*)pRxBuffer) = pSPIx->DR;
+			(uint16_t*)pRxBuffer++;
+			Len--;
+			Len--;
+		}
+		else
+		{
+			*pRxBuffer = pSPIx->DR;
+			pRxBuffer++;
+			Len--;
+		}
 
+	}
 }
+uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pTxBuffer, uint32_t Len)
+{
+	uint8_t state = pSPIHandle->TxState;
+	if(state != SPI_BUSY_IN_RX)
+	{
+	//save the buffer address and len to a global variable
+	pSPIHandle->pTxBuffer = pTxBuffer;
+	pSPIHandle->TxLen = Len;
+	// mark spi state as busy in tramission
+	pSPIHandle->TxState = SPI_BUSY_IN_TX;
+	//ENABLE TXEIE CONTROL BIT TO GET INTERRUPT WHEN TXE FLAG IS SET
+	pSPIHandle->pSPIx->CR2 |= (1 << SPI_CR2_TXEIE);
+	}
+	return state;
+}
+void SPI_ReceiveDataIT(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t Len);
+void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi)
+{
+	if(EnorDi == ENABLE)
+	{
+		if(IRQNumber <= 31)
+		{
+			*NVIC_ISER0 |= (1 << IRQNumber);
+		}
+		else if(IRQNumber > 31 && IRQNumber <= 63)
+		{
+			*NVIC_ISER1 |= (1 << (IRQNumber % 32));
+		}
+		else if(IRQNumber > 63 && IRQNumber <= 95)
+		{
+			*NVIC_ISER2 |= (1 << (IRQNumber % 64));
+		}
+	}
+}
+void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority)
+{
+	uint8_t iprx = IRQNumber / 4;
+	uint8_t iprx_section = IRQNumner % 4;
+	uint8_t shif_amount = (8 * iprx_section) + (8 - NO_IPR_BITS_IMPLEMENTED);
+	*(NVIC_IPR_BASEADDR + iprx) |= (IRQPriority << shift_amount);
+}
+void SPI_IRQHandling(SPI_Handle_t *pHandle);

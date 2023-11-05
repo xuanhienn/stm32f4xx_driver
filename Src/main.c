@@ -75,7 +75,7 @@ int main(void)
 	char user_data[] = "hello world";
     SPI2_GPIOInits();
     SPI2_Init();
-
+    SPI_PeripheralControl(SPI2, ENABLE);
     //enable
     SPI_SendData(SPI2, (uint8_t*)user_data, strlen(user_data));
 
