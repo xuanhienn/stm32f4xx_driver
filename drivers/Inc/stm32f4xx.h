@@ -9,9 +9,10 @@
 #define INC_STM32F4XX_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
-//#include "stm32f4xx_gpio_driver.h"
-//#include "stm32f4xx_spi_driver.h"
+#define __vo		volatile
+#define __weak		__attribute__((weak))
 //
 /*
  Arm cortex Mx Processor NVIC ISERx register Address
@@ -75,7 +76,7 @@
 //
 #define EXTI_BASEADDR			(APB2PERIPH_BASEADDR + 0x3C00)
 //
-#define __vo volatile
+
 typedef struct
 {
 	__vo uint32_t MODER;
@@ -282,7 +283,7 @@ typedef struct
 #define SPI_CR2_RXNEIE		5	//RX BUFFER NOT EMPTY INTERRUPT ENABLE
 #define SPI_CR2_TXEIE		6	//TX BUFFER EMPTY INTERRUPT ENABLE
 
-// BIT POSITION OF SPI_SR
+// BIT POSITION OF SPI_SR (STATUS REGISTER)
 #define SPI_SR_RXNE			0	//RECEIVE BUFFER NOT EMPTY
 #define SPI_SR_TXE			1	//TX BUFFER EMPTY
 #define SPI_SR_CHSIDE		2	//CHANNEL SIDE
