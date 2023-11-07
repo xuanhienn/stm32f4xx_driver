@@ -104,9 +104,9 @@ void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
 void SPI_IRQHandling(SPI_Handle_t *pHandle);
 void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi);
 //interrupt handle
-static void spi_txe_interrupt_handle(SPI_Handle_t *pSPIHandle);
-static void spi_rxe_interrupt_handle(SPI_Handle_t *pSPIHandle);
-static void spi_ovr_err_interrupt_handle(SPI_Handle_t *pSPIHandle);
+//static void spi_txe_interrupt_handle(SPI_Handle_t *pSPIHandle);
+//static void spi_rxe_interrupt_handle(SPI_Handle_t *pSPIHandle);
+//static void spi_ovr_err_interrupt_handle(SPI_Handle_t *pSPIHandle);
 void SPI_ClearOVRFlag(SPI_RegDef_t *pSPIx);
 void SPI_CloseTransmission(SPI_Handle_t *pSPIHandle);
 void SPI_CloseReception(SPI_Handle_t *pSPIHandle);

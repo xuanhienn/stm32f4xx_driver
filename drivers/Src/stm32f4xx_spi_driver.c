@@ -6,7 +6,9 @@
  */
 #include "stm32f4xx.h"
 #include "stm32f4xx_spi_driver.h"
-
+static void spi_txe_interrupt_handle(SPI_Handle_t *pSPIHandle);
+static void spi_rxe_interrupt_handle(SPI_Handle_t *pSPIHandle);
+static void spi_ovr_err_interrupt_handle(SPI_Handle_t *pSPIHandle);
 void SPI_Init(SPI_Handle_t *pSPIHandle)
 {
 	// ENABLE SPI PERIPHERAL CLOCK
