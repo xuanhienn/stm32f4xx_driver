@@ -73,11 +73,37 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 	pI2CHandle->pI2Cx->CR1 = temp;
 
 	// configure the FREQ field of CR2
+	temp = 0;
 	temp = RCC_GetPCLK1Value() / 1000000U;
 	pI2CHandle->pI2Cx->CR2 |= (temp & 0x1F);
-	//1. configure the mode
 
-	//2. config the speed of serial clock
+	temp = 0;
+	temp |= pI2CHandle->I2C_Config.I2C_DeviceAddress << I2C_OAR1_7BIT_ADDR;
+	temp |= (1 << 14); //14th bit should always be kept at 1 by software
+	pI2CHandle->pI2Cx->OAR1 = temp;
+	//1. configure the mode
+	temp = 0;
+	uint16_t ccr_value = 0;
+	if(pI2CHandle->I2C_Config.I2C_SCLSpeed == I2C_SCL_SPEED_SM)
+	{
+		ccr_value = RCC_GetPCLK1Value() / (2 * pI2CHandle->I2C_Config.I2C_SCLSpeed);
+		temp |= (ccr_value & 0xFFF);
+	}
+	else
+	{
+		if(pI2CHandle->I2C_Config.I2C_FMDutyCycle == I2C_FM_DUTY_2)
+		{
+			ccr_value = RCC_GetPCLK1Value() / (3 * pI2CHandle->I2C_Config.I2C_SCLSpeed);
+			temp |= (ccr_value & 0xFFF);
+		}
+		else if(pI2CHandle->I2C_Config.I2C_FMDutyCycle == I2C_FM_DUTY_16_9)
+		{
+			ccr_value = RCC_GetPCLK1Value() / (25 * pI2CHandle->I2C_Config.I2C_SCLSpeed);
+			temp |= (ccr_value & 0xFFF);
+		}
+	}
+	pI2CHandle->pI2Cx->CCR = temp;
+	//2. configure the speed of serial clock
 
 	//3. configure the device address
 

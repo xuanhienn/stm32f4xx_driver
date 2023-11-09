@@ -9,8 +9,9 @@
 #define INC_STM32F4XX_I2C_DRIVERS_H_
 #include "stm32f4xx.h"
 //I2C MASTER MODE
-#define I2C_MODE_STANDARD			0
-#define I2C_MODE_FAST				1
+#define I2C_SCL_SPEED_SM			100000
+#define I2C_SCL_SPEED_FM2K			200000
+#define I2C_SCL_SPEED_FM4K
 
 #define I2C_FM_DUTY_2				0
 #define I2C_FM_DUTY_16_9			1

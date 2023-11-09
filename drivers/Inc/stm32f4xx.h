@@ -265,7 +265,8 @@ typedef struct
 #define I2C_CCR_DUTY		14
 #define I2C_CCR_FS			15
 
-
+// bit position OAR reg
+#define I2C_OAR1_7BIT_ADDR	1
 //SPI
 #define SPI1_PCLK_EN()		(RCC->APB2ENR |= (1 << 12))
 #define SPI2_PCLK_EN()		(RCC->APB1ENR |= (1 << 14))
