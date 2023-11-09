@@ -110,4 +110,40 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 	//4. enable the ACK
 
 	//5. configure for the rise time for I2C time
+	uint32_t rise_time = 0;
+	if(pI2CHandle->I2C_Config.I2C_SCLSpeed == I2C_SCL_SPEED_SM)
+	{
+		rise_time = (RCC_GetPCLK1Value() / 1000000U) + 1;
+	}
+	else
+	{
+		rise_time = ((RCC_GetPCLK1Value() * 300) / 1000000000U) + 1;
+	}
+	pI2CHandle->pI2Cx->TRISE = (rise_time & 0x3F);
 }
+uint8_t I2C_GetFlagStatus(I2C_Handle_t *pI2CHandle, uint32_t FlagName)
+{
+	if(pI2CHandle->pI2Cx->SR1 & FlagName)
+	{
+		return FLAG_SET;
+	}
+	return FLAG_RESET;
+}
+static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
+{
+	SlaveAddr = SlaveAddr << 1;
+	SlaveAddr &= ~(1);
+	pI2Cx->DR = SlaveAddr;
+}
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t Len, uint8_t SlaveAddr)
+{
+	//1. Generate the Start condition
+	pI2CHandle->pI2Cx->CR1 |= I2C_CR1_START;
+	//2. checking SB flag
+	while(I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_SB) == FLAG_RESET);
+	//3. SEND THE ADDRESS OF THE SLAVE
+
+}
+
+
+
