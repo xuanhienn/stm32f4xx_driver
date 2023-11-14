@@ -8,6 +8,10 @@
 #include "stm32f4xx_i2c_drivers.h"
 uint16_t AHB_Prescaler[8] = {2, 4, 8, 16, 64, 128, 256, 512};
 uint8_t APB_Prescaler[4] = {2, 4, 8, 16};
+static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
+static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
+static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx);
+static void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
 void I2C_PeriClockControl(I2C_Handle_t *pI2CHandle, uint8_t EnorDi)
 {
 	if(EnorDi == ENABLE)
@@ -129,20 +133,53 @@ uint8_t I2C_GetFlagStatus(I2C_Handle_t *pI2CHandle, uint32_t FlagName)
 	}
 	return FLAG_RESET;
 }
+static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx)
+{
+	pI2Cx->CR1 |= (1 << I2C_CR1_START);
+}
 static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
 {
 	SlaveAddr = SlaveAddr << 1;
 	SlaveAddr &= ~(1);
 	pI2Cx->DR = SlaveAddr;
 }
-void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxbuffer, uint32_t Len, uint8_t SlaveAddr)
+static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx)
+{
+	uint32_t dummyRead = pI2Cx->SR1;
+	dummyRead = pI2Cx->SR2;
+	(void)dummyRead;
+}
+void static I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx)
+{
+	pI2Cx->CR1 |= (1 << I2C_CR1_STOP);
+}
+void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr)
 {
 	//1. Generate the Start condition
-	pI2CHandle->pI2Cx->CR1 |= I2C_CR1_START;
+	//pI2CHandle->pI2Cx->CR1 |= I2C_CR1_START;
+	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
 	//2. checking SB flag
-	while(I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_SB) == FLAG_RESET);
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_SB) == FLAG_RESET);
 	//3. SEND THE ADDRESS OF THE SLAVE
+	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, SlaveAddr);
+	//4. CONFIEM THAT ADDRESS PHASE IS COMPLETED BY CHECKING THE ADDR FLAG IN THE SR1
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_ADDR));
+	//5. CLEAR THE ADDR FLAG ACCORDING TO ITS SOFTWARE SEQUENCE
+	I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
+	//6. send the data until the length becomes 0
+	while(Len > 0)
+	{
+		while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_TXE));
+		pI2CHandle->pI2Cx->DR = *pTxBuffer;
+		pTxBuffer++;
+		Len--;
+	}
+	//7. when Len becomes 0, wait for TxE=1 and BTF=1 before generating the STOP condition.
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_TXE));
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_BTF));
 
+	//8. generate STOP condition
+	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
 }
 
 
