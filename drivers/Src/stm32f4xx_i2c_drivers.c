@@ -9,9 +9,11 @@
 uint16_t AHB_Prescaler[8] = {2, 4, 8, 16, 64, 128, 256, 512};
 uint8_t APB_Prescaler[4] = {2, 4, 8, 16};
 static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx);
-static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
+static void I2C_ExecuteAddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
+static void I2C_ExecuteAddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
 static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx);
 static void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
+//static void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi);
 void I2C_PeriClockControl(I2C_Handle_t *pI2CHandle, uint8_t EnorDi)
 {
 	if(EnorDi == ENABLE)
@@ -107,13 +109,8 @@ void I2C_Init(I2C_Handle_t *pI2CHandle)
 		}
 	}
 	pI2CHandle->pI2Cx->CCR = temp;
-	//2. configure the speed of serial clock
 
-	//3. configure the device address
 
-	//4. enable the ACK
-
-	//5. configure for the rise time for I2C time
 	uint32_t rise_time = 0;
 	if(pI2CHandle->I2C_Config.I2C_SCLSpeed == I2C_SCL_SPEED_SM)
 	{
@@ -137,10 +134,16 @@ static void I2C_GenerateStartCondition(I2C_RegDef_t *pI2Cx)
 {
 	pI2Cx->CR1 |= (1 << I2C_CR1_START);
 }
-static void I2C_ExecuteAddressPhase(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
+static void I2C_ExecuteAddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
 {
 	SlaveAddr = SlaveAddr << 1;
-	SlaveAddr &= ~(1);
+	SlaveAddr &= ~(1); //SLAVE ADDRESS + R/NW BIT = 0;
+	pI2Cx->DR = SlaveAddr;
+}
+static void I2C_ExecuteAddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
+{
+	SlaveAddr = SlaveAddr << 1;
+	SlaveAddr |= 1;
 	pI2Cx->DR = SlaveAddr;
 }
 static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx)
@@ -161,7 +164,7 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t L
 	//2. checking SB flag
 	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_SB) == FLAG_RESET);
 	//3. SEND THE ADDRESS OF THE SLAVE
-	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, SlaveAddr);
+	I2C_ExecuteAddressPhaseWrite(pI2CHandle->pI2Cx, SlaveAddr);
 	//4. CONFIEM THAT ADDRESS PHASE IS COMPLETED BY CHECKING THE ADDR FLAG IN THE SR1
 	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_ADDR));
 	//5. CLEAR THE ADDR FLAG ACCORDING TO ITS SOFTWARE SEQUENCE
@@ -180,6 +183,34 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t L
 
 	//8. generate STOP condition
 	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+
+void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
+{
+	if(EnorDi == ENABLE)
+	{
+		pI2Cx->CR1 |= (1 << I2C_CR1_ACK);
+	}
+	else
+	{
+		pI2Cx->CR1 &= ~(1 << I2C_CR1_ACK);
+	}
+}
+}
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr)
+{
+	//1. generate start condition
+	I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
+	//2. confirm that start generation is completed by checking SB flag in SR1
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_SB));
+	//3. send address of the slave with r/nw bit to set to R(1)
+	//pI2CHandle->pI2Cx->DR = (SlaveAddr << 1) | 0;
+	I2C_ExecuteAddressPhaseRead(pI2CHandle->pI2Cx, SlaveAddr);
+	//4. wait until  address phase is completed by checking the ADDR flag in SR1
+	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_ADDR));
+	if(Len == 1)
+	{
+
+	}
 }
 
 

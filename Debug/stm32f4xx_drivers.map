@@ -320,19 +320,23 @@ Discarded input sections
                 0x0000000000000000       0x2a ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_GenerateStartCondition
                 0x0000000000000000       0x20 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .text.I2C_ExecuteAddressPhase
+ .text.I2C_ExecuteAddressPhaseWrite
+                0x0000000000000000       0x2c ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .text.I2C_ExecuteAddressPhaseRead
                 0x0000000000000000       0x2c ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_ClearAddrFlag
                 0x0000000000000000       0x20 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_GenerateStopCondition
                 0x0000000000000000       0x20 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_MasterSendData
-                0x0000000000000000       0xb0 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_info    0x0000000000000000      0x627 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_abbrev  0x0000000000000000      0x17d ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000       0xb6 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .text.I2C_MasterReceiveData
+                0x0000000000000000       0x50 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_info    0x0000000000000000      0x6c2 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_abbrev  0x0000000000000000      0x195 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_aranges
-                0x0000000000000000       0x68 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_ranges  0x0000000000000000       0x58 ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000       0x78 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_ranges  0x0000000000000000       0x68 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x8e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0xa7e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x22 ./drivers/Src/stm32f4xx_i2c_drivers.o
@@ -344,10 +348,10 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x174 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0x4f2 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x6a ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_line    0x0000000000000000      0x69b ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_str     0x0000000000000000     0x5b7f ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_line    0x0000000000000000      0x6f7 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_str     0x0000000000000000     0x5bd1 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .comment       0x0000000000000000       0x51 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_frame   0x0000000000000000      0x18c ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_frame   0x0000000000000000      0x1d8 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .ARM.attributes
                 0x0000000000000000       0x34 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .group         0x0000000000000000        0xc ./drivers/Src/stm32f4xx_spi_driver.o

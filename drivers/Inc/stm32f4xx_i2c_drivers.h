@@ -45,4 +45,6 @@ typedef struct
 void I2C_PeriClockControl(I2C_Handle_t *pI2CHandle, uint8_t EnorDi);
 void I2C_Init(I2C_Handle_t *pI2CHandle);
 void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr);
+void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr);
+void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi);
 #endif /* INC_STM32F4XX_I2C_DRIVERS_H_ */
