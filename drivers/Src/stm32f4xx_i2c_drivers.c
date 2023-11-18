@@ -195,7 +195,7 @@ void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 		pI2Cx->CR1 &= ~(1 << I2C_CR1_ACK);
 	}
 }
-}
+
 void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr)
 {
 	//1. generate start condition
@@ -209,6 +209,9 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 	while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_ADDR));
 	if(Len == 1)
 	{
+		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+		//WAIT UNTIL RXNE BECOME 1
+		while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_RXNE));
 
 	}
 }
