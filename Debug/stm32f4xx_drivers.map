@@ -308,6 +308,8 @@ Discarded input sections
                 0x0000000000000000       0x10 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .data.APB_Prescaler
                 0x0000000000000000        0x4 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .text.I2C_ManageAcking
+                0x0000000000000000       0x38 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_PeriClockControl
                 0x0000000000000000       0x74 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.RCC_GetPLLOutputClock
@@ -329,14 +331,14 @@ Discarded input sections
  .text.I2C_GenerateStopCondition
                 0x0000000000000000       0x20 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_MasterSendData
-                0x0000000000000000       0xb6 ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000       0xb0 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_MasterReceiveData
-                0x0000000000000000       0x50 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_info    0x0000000000000000      0x6c2 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_abbrev  0x0000000000000000      0x195 ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000      0x104 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_info    0x0000000000000000      0x6fb ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_abbrev  0x0000000000000000      0x1b3 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_aranges
-                0x0000000000000000       0x78 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_ranges  0x0000000000000000       0x68 ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000       0x80 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_ranges  0x0000000000000000       0x70 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x8e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0xa7e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x22 ./drivers/Src/stm32f4xx_i2c_drivers.o
@@ -347,11 +349,11 @@ Discarded input sections
  .debug_macro   0x0000000000000000      0x1df ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0x174 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0x4f2 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_macro   0x0000000000000000       0x6a ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_line    0x0000000000000000      0x6f7 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_str     0x0000000000000000     0x5bd1 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_macro   0x0000000000000000       0x76 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_line    0x0000000000000000      0x792 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_str     0x0000000000000000     0x5bff ./drivers/Src/stm32f4xx_i2c_drivers.o
  .comment       0x0000000000000000       0x51 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_frame   0x0000000000000000      0x1d8 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_frame   0x0000000000000000      0x200 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .ARM.attributes
                 0x0000000000000000       0x34 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .group         0x0000000000000000        0xc ./drivers/Src/stm32f4xx_spi_driver.o

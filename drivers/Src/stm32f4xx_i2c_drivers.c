@@ -13,6 +13,17 @@ static void I2C_ExecuteAddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
 static void I2C_ExecuteAddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
 static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx);
 static void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
+void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
+{
+	if(EnorDi == I2C_ACK_ENABLE)
+	{
+		pI2Cx->CR1 |= (1 << I2C_CR1_ACK);
+	}
+	else
+	{
+		pI2Cx->CR1 &= ~(1 << I2C_CR1_ACK);
+	}
+}
 //static void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi);
 void I2C_PeriClockControl(I2C_Handle_t *pI2CHandle, uint8_t EnorDi)
 {
@@ -183,17 +194,6 @@ void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t L
 
 	//8. generate STOP condition
 	I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
-
-void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
-{
-	if(EnorDi == ENABLE)
-	{
-		pI2Cx->CR1 |= (1 << I2C_CR1_ACK);
-	}
-	else
-	{
-		pI2Cx->CR1 &= ~(1 << I2C_CR1_ACK);
-	}
 }
 
 void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr)
@@ -210,9 +210,44 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 	if(Len == 1)
 	{
 		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+		//generate stop condition
+		I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+
+		//clear addr flag
+		I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
 		//WAIT UNTIL RXNE BECOME 1
 		while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_RXNE));
 
+		//read data in buffer
+		*pRxBuffer = pI2CHandle->pI2Cx->DR;
+		return;
+
+	}
+	if(Len > 1)
+	{
+		//clear addr flag
+		I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
+		//read the data until len becomes 0
+		for(uint32_t i = Len; i > 0; i--)
+		{
+			//wait until RNXE becomes 1
+			while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_RXNE));
+			if(i == 2)
+			{
+				// clear the ack bit
+				I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+				//generate stop condition
+				I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+			}
+			//READ THE DATA TO THE BUFFER
+			*pRxBuffer = pI2CHandle->pI2Cx->DR;
+			pRxBuffer++;
+		}
+
+	}
+	if(pI2CHandle->I2C_Config.I2C_AckControl == I2C_ACK_ENABLE)
+	{
+		I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_ENABLE);
 	}
 }
 
