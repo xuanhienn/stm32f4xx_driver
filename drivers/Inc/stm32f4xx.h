@@ -31,6 +31,11 @@
 #define NVIC_IPR_BASEADDR		((__vo uint32_t*)0xE000E400)
 //
 #define NO_IPR_BITS_IMPLEMENTED	4
+
+//MACROS FOR ALL THE POSSIBLE PRIRORITY LEVELS
+#define NVIC_IRQ_PRI0			0
+#define NVIC_IRQ_PRI15			15
+
 //base addresses of flash and SRAM memories
 #define FLASH_BASEADDR			0x08000000UL
 #define SRAM1_BASEADDR			0x20000000UL // 112KB = 114688 Byte => Hex: 1C000
@@ -325,7 +330,11 @@ typedef struct
 #define IRQ_NO_EXTI4		10
 #define IRQ_NO_EXTI9_5		23
 #define IRQ_NO_EXTI15_10	40
-
+#define IRQ_NO_SPI1			35
+#define IRQ_NO_SPI2			36
+#define IRQ_NO_SPI3			51
+#define IRQ_NO_I2C1_EV		31
+#define IRQ_NO_I2C1_ER		32
 /*
  * BIT POSITION DEFINITIONS OF SPI PERIPHERAL SPI_CR1
  * */

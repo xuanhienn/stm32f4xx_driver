@@ -31,6 +31,11 @@
 
 #define I2C_ACK_ENABLE				ENABLE
 #define I2C_ACK_DISABLE				DISABLE
+
+//define application state
+#define	I2C_READY					0
+#define I2C_BUSY_IN_RX				1
+#define I2C_BUSY_IN_TX				2
 typedef struct
 {
 	uint32_t	I2C_SCLSpeed;
@@ -41,12 +46,29 @@ typedef struct
 
 typedef struct
 {
-	I2C_RegDef_t *pI2Cx;
-	I2C_Config_t I2C_Config;
+	I2C_RegDef_t 	*pI2Cx;
+	I2C_Config_t 	I2C_Config;
+	uint8_t 		*pTxBuffer;
+	uint8_t 		*pRxBuffer;
+	uint32_t		TxLen;
+	uint32_t 		RxLen;
+	uint32_t		TxRxState;
+	uint8_t			DevAddr;
+	uint32_t		RxSize;
+	uint8_t			Sr; // store repeated start value
 } I2C_Handle_t;
+
 void I2C_PeriClockControl(I2C_Handle_t *pI2CHandle, uint8_t EnorDi);
 void I2C_Init(I2C_Handle_t *pI2CHandle);
+uint8_t I2C_GetFlagStatus(I2C_Handle_t *pI2CHandle, uint32_t FlagName);
 void I2C_MasterSendData(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr);
 void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t SlaveAddr);
 void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi);
+
+uint8_t I2C_MasterSendDataIT(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr);
+uint8_t I2C_MasterReceiveIT(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr);
+
+void I2C_IRQInteruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
+void I2C_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
+
 #endif /* INC_STM32F4XX_I2C_DRIVERS_H_ */
