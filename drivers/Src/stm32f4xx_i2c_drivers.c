@@ -251,5 +251,93 @@ void I2C_MasterReceiveData(I2C_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_
 	}
 }
 
+uint8_t I2C_MasterSendDataIT(I2C_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t SlaveAddr, uint8_t Sr)
+{
+	uint8_t busystate = pI2CHandle->TxRxState;
+	if((busystate != I2C_BUSY_IN_TX) | (busystate != I2C_BUSY_IN_RX))
+	{
+		pI2CHandle->pTxBuffer = pTxBuffer;
+		pI2CHandle->TxLen = Len;
+		pI2CHandle->DevAddr = SlaveAddr;
+		pI2CHandle->TxRxState = I2C_BUSY_IN_TX;
+		pI2CHandle->Sr = Sr;
+
+		//implement code to generate start condition
+		I2C_GenerateStartCondition(pI2CHandle->pI2Cx);
+		//IMLEMENT CODE TO ENABLE ITBUFEN CONTROL BIT
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITBUFEN);
+		// IMPLEMENT THE CODE TO ENABLE ITEVTEN control bit;
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITEVTEN);
+		// implement the code to enable ITERREN control bit
+		pI2CHandle->pI2Cx->CR2 |= (1 << I2C_CR2_ITERREN);
+
+	}
+	return busystate;
+}
+
+void I2C_EV_IRQHandling(I2C_Handle_t *pI2CHandle)
+{
+	uint32_t temp1, temp2, temp3;
+	temp1 = pI2CHandle->pI2Cx->CR2 & (1 << I2C_CR2_ITEVTEN);
+	temp2 = pI2CHandle->pI2Cx->CR2 & (1 << I2C_CR2_ITBUFEN);
+
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_SB);
+	//
+	if(temp1 && temp3)
+	{
+		//sb flag is set_
+		if(pI2CHandle->TxRxState == I2C_BUSY_IN_TX)
+		{
+			I2C_ExecuteAddressPhaseWrite(pI2CHandle->pI2Cx, pI2CHandle->DevAddr);
+		}
+		else if(pI2CHandle->TxRxState == I2C_BUSY_IN_RX)
+		{
+			I2C_ExecuteAddressPhaseRead(pI2CHandle->pI2Cx, pI2CHandle->DevAddr);
+		}
+
+	}
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_ADDR);
+	if(temp1 && temp3)
+	{
+		I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
+	}
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_BTF);
+	if(temp1 && temp3)
+	{
+		//BTF is set
+		//check the state
+		if(pI2CHandle->TxRxState == I2C_BUSY_IN_TX)
+		{
+			//make sure TXE is also set
+			if(pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_TXE))
+			{
+				//BTF = 1, TXE = 1
+				//1. generate stop condition
+				I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+			}
+		}
+	}
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_STOPF);
+	if(temp1 && temp3)
+	{
+
+	}
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_RxNE);
+	if(temp1 && temp3)
+	{
+
+	}
+	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_TXE);
+	if(temp1 && temp3)
+	{
+
+	}
+
+}
+
+void I2C_ER_IRQHandling(I2C_Handle_t *pI2CHandle)
+{
+
+}
 
 

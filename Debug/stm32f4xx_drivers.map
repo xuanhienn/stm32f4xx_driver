@@ -289,7 +289,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x6a ./drivers/Src/stm32f4xx_gpio_driver.o
  .debug_macro   0x0000000000000000      0x1df ./drivers/Src/stm32f4xx_gpio_driver.o
  .debug_macro   0x0000000000000000      0x174 ./drivers/Src/stm32f4xx_gpio_driver.o
- .debug_macro   0x0000000000000000      0x4f2 ./drivers/Src/stm32f4xx_gpio_driver.o
+ .debug_macro   0x0000000000000000      0x52f ./drivers/Src/stm32f4xx_gpio_driver.o
  .debug_macro   0x0000000000000000       0xc4 ./drivers/Src/stm32f4xx_gpio_driver.o
  .group         0x0000000000000000        0xc ./drivers/Src/stm32f4xx_i2c_drivers.o
  .group         0x0000000000000000        0xc ./drivers/Src/stm32f4xx_i2c_drivers.o
@@ -334,11 +334,13 @@ Discarded input sections
                 0x0000000000000000       0xb0 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .text.I2C_MasterReceiveData
                 0x0000000000000000      0x104 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_info    0x0000000000000000      0x6fb ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_abbrev  0x0000000000000000      0x1b3 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .text.I2C_MasterSendDataIT
+                0x0000000000000000       0x7c ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_info    0x0000000000000000      0x7d7 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_abbrev  0x0000000000000000      0x1c4 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_aranges
-                0x0000000000000000       0x80 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_ranges  0x0000000000000000       0x70 ./drivers/Src/stm32f4xx_i2c_drivers.o
+                0x0000000000000000       0x88 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_ranges  0x0000000000000000       0x78 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x8e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0xa7e ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000       0x22 ./drivers/Src/stm32f4xx_i2c_drivers.o
@@ -348,12 +350,12 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x6a ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0x1df ./drivers/Src/stm32f4xx_i2c_drivers.o
  .debug_macro   0x0000000000000000      0x174 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_macro   0x0000000000000000      0x4f2 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_macro   0x0000000000000000       0x76 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_line    0x0000000000000000      0x792 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_str     0x0000000000000000     0x5bff ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_macro   0x0000000000000000      0x52f ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_macro   0x0000000000000000       0x88 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_line    0x0000000000000000      0x7e6 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_str     0x0000000000000000     0x5d08 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .comment       0x0000000000000000       0x51 ./drivers/Src/stm32f4xx_i2c_drivers.o
- .debug_frame   0x0000000000000000      0x200 ./drivers/Src/stm32f4xx_i2c_drivers.o
+ .debug_frame   0x0000000000000000      0x224 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .ARM.attributes
                 0x0000000000000000       0x34 ./drivers/Src/stm32f4xx_i2c_drivers.o
  .group         0x0000000000000000        0xc ./drivers/Src/stm32f4xx_spi_driver.o
@@ -403,7 +405,7 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x6a ./drivers/Src/stm32f4xx_spi_driver.o
  .debug_macro   0x0000000000000000      0x1df ./drivers/Src/stm32f4xx_spi_driver.o
  .debug_macro   0x0000000000000000      0x174 ./drivers/Src/stm32f4xx_spi_driver.o
- .debug_macro   0x0000000000000000      0x4f2 ./drivers/Src/stm32f4xx_spi_driver.o
+ .debug_macro   0x0000000000000000      0x52f ./drivers/Src/stm32f4xx_spi_driver.o
  .text          0x0000000000000000        0x0 c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.100.202210260954/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-errno.o)
  .data          0x0000000000000000        0x0 c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.100.202210260954/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-errno.o)
  .bss           0x0000000000000000        0x0 c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.100.202210260954/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-errno.o)
@@ -822,7 +824,7 @@ LOAD c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_ranges  0x0000000000000040       0x58 ./drivers/Src/stm32f4xx_gpio_driver.o
  .debug_ranges  0x0000000000000098       0x98 ./drivers/Src/stm32f4xx_spi_driver.o
 
-.debug_macro    0x0000000000000000     0x2136
+.debug_macro    0x0000000000000000     0x2173
  .debug_macro   0x0000000000000000      0x165 ./Src/main.o
  .debug_macro   0x0000000000000165      0xa7e ./Src/main.o
  .debug_macro   0x0000000000000be3       0x22 ./Src/main.o
@@ -832,28 +834,28 @@ LOAD c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x0000000000000de7       0x6a ./Src/main.o
  .debug_macro   0x0000000000000e51      0x1df ./Src/main.o
  .debug_macro   0x0000000000001030      0x174 ./Src/main.o
- .debug_macro   0x00000000000011a4      0x4f2 ./Src/main.o
- .debug_macro   0x0000000000001696       0xc4 ./Src/main.o
- .debug_macro   0x000000000000175a       0xca ./Src/main.o
- .debug_macro   0x0000000000001824       0x52 ./Src/main.o
- .debug_macro   0x0000000000001876       0x1e ./Src/main.o
- .debug_macro   0x0000000000001894       0x3c ./Src/main.o
- .debug_macro   0x00000000000018d0       0x34 ./Src/main.o
- .debug_macro   0x0000000000001904       0x16 ./Src/main.o
- .debug_macro   0x000000000000191a       0x43 ./Src/main.o
- .debug_macro   0x000000000000195d       0x34 ./Src/main.o
- .debug_macro   0x0000000000001991       0x10 ./Src/main.o
- .debug_macro   0x00000000000019a1       0x58 ./Src/main.o
- .debug_macro   0x00000000000019f9       0x71 ./Src/main.o
- .debug_macro   0x0000000000001a6a       0x1c ./Src/main.o
- .debug_macro   0x0000000000001a86      0x12a ./Src/main.o
- .debug_macro   0x0000000000001bb0      0x341 ./Src/main.o
- .debug_macro   0x0000000000001ef1       0x10 ./Src/main.o
- .debug_macro   0x0000000000001f01       0x35 ./Src/main.o
- .debug_macro   0x0000000000001f36       0x20 ./Src/main.o
- .debug_macro   0x0000000000001f56       0x8e ./drivers/Src/stm32f4xx_gpio_driver.o
- .debug_macro   0x0000000000001fe4       0x8e ./drivers/Src/stm32f4xx_spi_driver.o
- .debug_macro   0x0000000000002072       0xc4 ./drivers/Src/stm32f4xx_spi_driver.o
+ .debug_macro   0x00000000000011a4      0x52f ./Src/main.o
+ .debug_macro   0x00000000000016d3       0xc4 ./Src/main.o
+ .debug_macro   0x0000000000001797       0xca ./Src/main.o
+ .debug_macro   0x0000000000001861       0x52 ./Src/main.o
+ .debug_macro   0x00000000000018b3       0x1e ./Src/main.o
+ .debug_macro   0x00000000000018d1       0x3c ./Src/main.o
+ .debug_macro   0x000000000000190d       0x34 ./Src/main.o
+ .debug_macro   0x0000000000001941       0x16 ./Src/main.o
+ .debug_macro   0x0000000000001957       0x43 ./Src/main.o
+ .debug_macro   0x000000000000199a       0x34 ./Src/main.o
+ .debug_macro   0x00000000000019ce       0x10 ./Src/main.o
+ .debug_macro   0x00000000000019de       0x58 ./Src/main.o
+ .debug_macro   0x0000000000001a36       0x71 ./Src/main.o
+ .debug_macro   0x0000000000001aa7       0x1c ./Src/main.o
+ .debug_macro   0x0000000000001ac3      0x12a ./Src/main.o
+ .debug_macro   0x0000000000001bed      0x341 ./Src/main.o
+ .debug_macro   0x0000000000001f2e       0x10 ./Src/main.o
+ .debug_macro   0x0000000000001f3e       0x35 ./Src/main.o
+ .debug_macro   0x0000000000001f73       0x20 ./Src/main.o
+ .debug_macro   0x0000000000001f93       0x8e ./drivers/Src/stm32f4xx_gpio_driver.o
+ .debug_macro   0x0000000000002021       0x8e ./drivers/Src/stm32f4xx_spi_driver.o
+ .debug_macro   0x00000000000020af       0xc4 ./drivers/Src/stm32f4xx_spi_driver.o
 
 .debug_line     0x0000000000000000     0x17b4
  .debug_line    0x0000000000000000      0x5e2 ./Src/main.o
@@ -861,15 +863,15 @@ LOAD c:/st/stm32cubeide_1.11.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_line    0x0000000000000666      0x8d2 ./drivers/Src/stm32f4xx_gpio_driver.o
  .debug_line    0x0000000000000f38      0x87c ./drivers/Src/stm32f4xx_spi_driver.o
 
-.debug_str      0x0000000000000000     0x8e1d
- .debug_str     0x0000000000000000     0x89c6 ./Src/main.o
-                                       0x8bc8 (size before relaxing)
- .debug_str     0x00000000000089c6       0x31 ./Startup/startup_stm32f407vgtx.o
+.debug_str      0x0000000000000000     0x8eb4
+ .debug_str     0x0000000000000000     0x8a5d ./Src/main.o
+                                       0x8c5f (size before relaxing)
+ .debug_str     0x0000000000008a5d       0x31 ./Startup/startup_stm32f407vgtx.o
                                          0x62 (size before relaxing)
- .debug_str     0x00000000000089f7      0x28e ./drivers/Src/stm32f4xx_gpio_driver.o
-                                       0x5c04 (size before relaxing)
- .debug_str     0x0000000000008c85      0x198 ./drivers/Src/stm32f4xx_spi_driver.o
-                                       0x5cfa (size before relaxing)
+ .debug_str     0x0000000000008a8e      0x28e ./drivers/Src/stm32f4xx_gpio_driver.o
+                                       0x5c9b (size before relaxing)
+ .debug_str     0x0000000000008d1c      0x198 ./drivers/Src/stm32f4xx_spi_driver.o
+                                       0x5d91 (size before relaxing)
 
 .comment        0x0000000000000000       0x50
  .comment       0x0000000000000000       0x50 ./Src/main.o

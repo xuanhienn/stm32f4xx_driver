@@ -11,3 +11,4 @@
 ../drivers/Src/stm32f4xx_i2c_drivers.c:166:13:I2C_GenerateStopCondition	16	static
 ../drivers/Src/stm32f4xx_i2c_drivers.c:170:6:I2C_MasterSendData	24	static
 ../drivers/Src/stm32f4xx_i2c_drivers.c:199:6:I2C_MasterReceiveData	32	static
+../drivers/Src/stm32f4xx_i2c_drivers.c:254:9:I2C_MasterSendDataIT	32	static
