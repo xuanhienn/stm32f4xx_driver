@@ -13,6 +13,7 @@ static void I2C_ExecuteAddressPhaseWrite(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr)
 static void I2C_ExecuteAddressPhaseRead(I2C_RegDef_t *pI2Cx, uint8_t SlaveAddr);
 static void I2C_ClearAddrFlag(I2C_RegDef_t *pI2Cx);
 static void I2C_GenerateStopCondition(I2C_RegDef_t *pI2Cx);
+void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t EventCode);
 void I2C_ManageAcking(I2C_RegDef_t *pI2Cx, uint8_t EnorDi)
 {
 	if(EnorDi == I2C_ACK_ENABLE)
@@ -313,24 +314,81 @@ void I2C_EV_IRQHandling(I2C_Handle_t *pI2CHandle)
 			{
 				//BTF = 1, TXE = 1
 				//1. generate stop condition
+				if(pI2CHandle->Sr == DISABLE)
+				{
 				I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+				}
+				//2. reset all the member elements of the handle structure
+				I2C_CloseSenData();
+				//3. notify the application about the transmission complete
+				I2C_ApplicationEventCallback(pI2CHandle,I2C_EVENT_TX_CMPLT);
 			}
+		}
+		else if(pI2CHandle->TxRxState == I2C_BUSY_IN_RX)
+		{
+			;// this line is intended to be blank
 		}
 	}
 	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_STOPF);
 	if(temp1 && temp3)
 	{
-
+//		uint8_t dummyRead = pI2CHandle->pI2Cx->SR1;
+		pI2CHandle->pI2Cx->CR1 |= 0x0000;
+		//notify the application that STOP is detected
+		I2C_ApplicationEventCallback(pI2CHandle, I2C_EVENT_STOP);
 	}
 	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_RxNE);
 	if(temp1 && temp3)
 	{
+		if(pI2CHandle->TxRxState == I2C_BUSY_IN_RX)
+		{
+			if(pI2CHandle->RxLen == 1)
+			{
+				// disable ack flag
+				I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+				//clear the address
+				I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
 
+				while(!I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_RXNE));
+
+				if(pI2CHandle->Sr == DISABLE)
+				{
+					I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+				}
+				*pI2CHandle->pRxBuffer = pI2CHandle->pI2Cx->DR;
+			}
+			else if (pI2CHandle->RxLen > 1)
+			{
+				I2C_ClearAddrFlag(pI2CHandle->pI2Cx);
+				for(uint8_t i = pI2CHandle->RxLen; i > 0; i--)
+				{
+					while(! I2C_GetFlagStatus(pI2CHandle, I2C_FLAG_RXNE));
+					if(i == 2 )
+					{
+						I2C_ManageAcking(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+						I2C_GenerateStopCondition(pI2CHandle->pI2Cx);
+					}
+					*pI2CHandle->pRxBuffer = pI2CHandle->pI2Cx->DR;
+					pI2CHandle->pRxBuffer++;
+				}
+			}
+		}
 	}
 	temp3 = pI2CHandle->pI2Cx->SR1 & (1 << I2C_SR1_TXE);
 	if(temp1 && temp3)
 	{
-
+		if(pI2CHandle->pI2Cx->SR2 &= (1 << I2C_SR2_MSL))
+		{
+			if(pI2CHandle->TxRxState == I2C_BUSY_IN_TX)
+			{
+				if(pI2CHandle->TxLen > 0)
+				{
+					pI2CHandle->pI2Cx->DR = pI2CHandle->pTxBuffer;
+					pI2CHandle->TxLen--;
+					pI2CHandle->pTxBuffer++;
+				}
+			}
+		}
 	}
 
 }

@@ -36,6 +36,11 @@
 #define	I2C_READY					0
 #define I2C_BUSY_IN_RX				1
 #define I2C_BUSY_IN_TX				2
+
+// I2C Application Event complete definition
+#define I2C_EVENT_TX_CMPLT			0
+#define I2C_EVENT_RX_CMPLT			1
+#define I2C_EVENT_STOP				3
 typedef struct
 {
 	uint32_t	I2C_SCLSpeed;
@@ -72,4 +77,7 @@ void I2C_IRQInteruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
 void I2C_IRQPriorityConfig(uint8_t IRQNumber, uint8_t IRQPriority);
 void I2C_EV_IRQHandling(I2C_Handle_t *pI2CHandle);
 void I2C_ER_IRQHandling(I2C_Handle_t *pI2CHandle);
+
+void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t EventCode);
+void I2C_CloseSendData();
 #endif /* INC_STM32F4XX_I2C_DRIVERS_H_ */
