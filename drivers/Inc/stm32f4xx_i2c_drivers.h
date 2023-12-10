@@ -40,7 +40,14 @@
 // I2C Application Event complete definition
 #define I2C_EVENT_TX_CMPLT			0
 #define I2C_EVENT_RX_CMPLT			1
-#define I2C_EVENT_STOP				3
+#define I2C_EVENT_STOP				2
+
+// I2C application error
+#define I2C_ERROR_BERR				3
+#define I2C_ERROR_AF				4
+#define I2C_ERROR_APLO				5
+#define I2C_ERROR_OVR				6
+#define I2C_ERROR_TIMEOUT			7
 typedef struct
 {
 	uint32_t	I2C_SCLSpeed;
@@ -79,5 +86,9 @@ void I2C_EV_IRQHandling(I2C_Handle_t *pI2CHandle);
 void I2C_ER_IRQHandling(I2C_Handle_t *pI2CHandle);
 
 void I2C_ApplicationEventCallback(I2C_Handle_t *pI2CHandle, uint8_t EventCode);
-void I2C_CloseSendData();
+void I2C_CloseSendData(I2C_Handle_t *pI2CHandle);
+void I2C_CloseReceiveData(I2C_Handle_t *pI2CHandle);
+
+void I2C_SlaveSendData(I2C_RegDef_t *pI2Cx, uint8_t data);
+uint8_t I2C_SlaveReceiveData(I2C_RegDef_t *pI2Cx);
 #endif /* INC_STM32F4XX_I2C_DRIVERS_H_ */
